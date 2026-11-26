@@ -35,6 +35,11 @@ AccessControlInfo:
   SystemModeExt           : 124MB
   CpuSpeed                : 804MHz
 
+  IORegisterMapping:
+    - 1ff00000-1ff7ffff
+  MemoryMapping:
+    - 1f000000-1f5fffff:r
+
   FileSystemAccess:
     - DirectSdmc
     - Debug

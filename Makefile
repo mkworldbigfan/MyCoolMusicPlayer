@@ -21,7 +21,7 @@ ROMFS           := romfs
 APP_TITLE       := My Cool 3DS Music Player!
 APP_DESCRIPTION := hiiii
 APP_AUTHOR      := harina
-ICON            := $(CURDIR)/meta/icon.png
+ICON            := meta/icon.png
 
 ARCH    := -march=armv6k -mtune=mpcore -mfloat-abi=hard -mtp=soft
 
@@ -46,6 +46,7 @@ ifneq ($(BUILD),$(notdir $(CURDIR)))
 
 export OUTPUT   := $(CURDIR)/$(TARGET)
 export TOPDIR   := $(CURDIR)
+export APP_ICON := $(TOPDIR)/$(ICON)
 
 export VPATH    := $(foreach dir,$(SOURCES),$(CURDIR)/$(dir)) \
                    $(foreach dir,$(GRAPHICS),$(CURDIR)/$(dir)) \
@@ -86,14 +87,21 @@ endif
 
 all: $(BUILD) $(DEPSDIR)
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
-
-cia: all
-	@if [ -f $(CURDIR)/meta/banner.cgfx ]; then \
-		bannertool makebanner -cgfx $(CURDIR)/meta/banner.cgfx -a $(CURDIR)/meta/sound.wav -o $(BUILD)/banner.bin; \
+	
+cia:
+	@test -f $(TOPDIR)/$(ICON) || { echo "ERROR: falta $(ICON) (PNG de 48x48)"; exit 1; }
+	@test -f $(TOPDIR)/meta/sound.wav || { echo "ERROR: falta meta/sound.wav (WAV PCM 16-bit, max 3 s)"; exit 1; }
+	@test -f $(TOPDIR)/meta/app.rsf || { echo "ERROR: falta meta/app.rsf"; exit 1; }
+	@rm -f $(OUTPUT).smdh $(BUILD)/banner.bin
+	@$(MAKE) --no-print-directory all
+	@if [ -f $(TOPDIR)/meta/banner.cgfx ]; then \
+		bannertool makebanner -cgfx $(TOPDIR)/meta/banner.cgfx -a $(TOPDIR)/meta/sound.wav -o $(BUILD)/banner.bin; \
 	else \
-		bannertool makebanner -i $(CURDIR)/meta/logo.png -a $(CURDIR)/meta/sound.wav -o $(BUILD)/banner.bin; \
+		bannertool makebanner -i $(TOPDIR)/meta/logo.png -a $(TOPDIR)/meta/sound.wav -o $(BUILD)/banner.bin; \
 	fi
-	@makerom -f cia -o $(CURDIR)/$(TARGET).cia -elf $(CURDIR)/$(TARGET).elf -rsf $(CURDIR)/meta/app.rsf -icon $(CURDIR)/$(TARGET).smdh -banner $(BUILD)/banner.bin
+	@test -f $(BUILD)/banner.bin || { echo "ERROR: bannertool no genero banner.bin"; exit 1; }
+	@makerom -f cia -o $(TOPDIR)/$(TARGET).cia -elf $(TOPDIR)/$(TARGET).elf -rsf $(TOPDIR)/meta/app.rsf -icon $(TOPDIR)/$(TARGET).smdh -banner $(BUILD)/banner.bin
+	@echo built ... $(TARGET).cia
 
 $(BUILD):
 	@mkdir -p $@

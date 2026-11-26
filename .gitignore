@@ -1,0 +1,14 @@
+build/
+.vscode/
+*.3dsx
+*.cia
+*.elf
+*.smdh
+*.o
+*.d
+*.map
+*.tmp
+*.bak
+NUL
+Thumbs.db
+.DS_Store

@@ -12,3 +12,4 @@ build/
 NUL
 Thumbs.db
 .DS_Store
+.clangd

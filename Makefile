@@ -11,15 +11,15 @@ include $(DEVKITARM)/3ds_rules
 
 TARGET          := mycool3dsmp
 BUILD           := build
-SOURCES         := source
+SOURCES         := source third_party/faad2/libfaad
 DATA            := data
-INCLUDES        := include
+INCLUDES        := include third_party/faad2/include third_party/faad2/libfaad
 GRAPHICS        := gfx
 GFXBUILD        := $(BUILD)
 ROMFS           := romfs
 
 APP_TITLE       := My Cool 3DS Music Player!
-APP_DESCRIPTION := hiiii
+APP_DESCRIPTION := MCMP!
 APP_AUTHOR      := harina
 ICON            := meta/icon.png
 
@@ -29,7 +29,7 @@ CFLAGS  := -g -Wall -O2 -mword-relocations \
            -ffunction-sections \
            $(ARCH)
 
-CFLAGS  += $(INCLUDE) -D__3DS__ -I$(PORTLIBS)/include/opus
+CFLAGS  += $(INCLUDE) -D__3DS__ -I$(PORTLIBS)/include/opus -DHAVE_STDINT_H -DHAVE_INTTYPES_H -DHAVE_MEMCPY -DHAVE_STRING_H -DPACKAGE_VERSION=\"2.11.4\" -Wno-unused-but-set-variable -Wno-unused-variable
 
 CXXFLAGS := $(CFLAGS) -fno-rtti -fno-exceptions -std=gnu++11
 

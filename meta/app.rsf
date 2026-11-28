@@ -3,7 +3,7 @@ BasicInfo:
   CompanyCode             : 00
   ProductCode             : CTR-P-MCMP
   ContentType             : Application
-  Logo                    : Homebrew
+  Logo                    : Licensed
 
 TitleInfo:
   UniqueId                : 0xF3D5A
